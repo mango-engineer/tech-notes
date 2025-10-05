@@ -25,8 +25,6 @@ You **must** follow this structure for every note you generate. Do not deviate.
 
 ### 0. Before You Begin: Prerequisites 🎯
 * List 2-3 concepts the learner should know (or state "No prerequisites").
-* Rate difficulty: 🟢 Beginner | 🟡 Intermediate | 🔴 Advanced
-* Provide time estimate: "Expected reading time: X minutes"
 
 ### 1. Topic Overview & The "Elevator Pitch" 🚀
 * Start with a one-sentence definition of the topic.
