@@ -23,10 +23,6 @@
 - Familiarity with databases (SQL/NoSQL)
 - Basic networking concepts (HTTP, TCP/IP)
 
-**Difficulty:** 🟡 Intermediate
-
-**Expected reading time:** 25-30 minutes
-
 ---
 
 ## 1. Topic Overview & The "Elevator Pitch" 🚀
@@ -222,10 +218,18 @@ Imagine you're building a tower (vertical scaling) but it can only go so high. S
 **What it is:** A traffic cop that distributes incoming requests across multiple servers to prevent any single server from being overwhelmed.
 
 **How it works:**
-```
-Client Request → Load Balancer → Server 1
-                              → Server 2
-                              → Server 3
+```mermaid
+graph LR
+    Client[👤 Client Request] --> LB[⚖️ Load Balancer]
+    LB --> Server1[🖥️ Server 1]
+    LB --> Server2[🖥️ Server 2]
+    LB --> Server3[🖥️ Server 3]
+    
+    style Client fill:#e1f5ff
+    style LB fill:#fff4e1
+    style Server1 fill:#e1ffe1
+    style Server2 fill:#e1ffe1
+    style Server3 fill:#e1ffe1
 ```
 
 **Load Balancing Algorithms:**
@@ -276,10 +280,21 @@ Client Request → Load Balancer → Server 1
 **Architecture Patterns:**
 
 **1. Master-Slave (Primary-Replica):**
-```
-Master (writes) → Replica 1 (reads)
-                → Replica 2 (reads)
-                → Replica 3 (reads)
+```mermaid
+graph TB
+    Master[(💾 Master DB<br/>Writes)]
+    Replica1[(📖 Replica 1<br/>Reads)]
+    Replica2[(📖 Replica 2<br/>Reads)]
+    Replica3[(📖 Replica 3<br/>Reads)]
+    
+    Master -.->|Replicates Data| Replica1
+    Master -.->|Replicates Data| Replica2
+    Master -.->|Replicates Data| Replica3
+    
+    style Master fill:#e1ffe1
+    style Replica1 fill:#f0ffe1
+    style Replica2 fill:#f0ffe1
+    style Replica3 fill:#f0ffe1
 ```
 - One master handles all writes
 - Slaves replicate master's data
@@ -287,6 +302,16 @@ Master (writes) → Replica 1 (reads)
 - Reduces read load on master
 
 **2. Master-Master (Multi-Master):**
+```mermaid
+graph LR
+    Master1[(💾 Master 1<br/>Read/Write)]
+    Master2[(💾 Master 2<br/>Read/Write)]
+    
+    Master1 <-.->|Bi-directional Sync| Master2
+    
+    style Master1 fill:#e1ffe1
+    style Master2 fill:#e1ffe1
+```
 - Multiple masters can accept writes
 - Masters sync with each other
 - Complex conflict resolution

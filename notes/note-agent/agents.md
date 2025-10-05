@@ -58,6 +58,7 @@ You **must** follow this structure for every note you generate. Do not deviate.
 * Generate a Mermaid diagram to visually represent the topic (mandatory).
 * Enclose in a `mermaid` code block.
 * Add visual metaphors (icons/emojis) to key terms when possible.
+* **For Architecture Patterns:** Always include a Mermaid diagram showing the architectural structure, component relationships, and data flow.
 
 ### 6. Practical Example or Case Study 💡
 * Provide a concise, real-world example. For `[Depth: Expert]`, include a code snippet.
