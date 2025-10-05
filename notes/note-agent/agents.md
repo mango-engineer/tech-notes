@@ -53,6 +53,7 @@ You **must** follow this structure for every note you generate. Do not deviate.
 * Explain how key concepts work together.
 * Build from familiar to unfamiliar concepts (scaffolding).
 * Add "⏸️ **Pause & Process**" markers after dense sections.
+* **For Architecture Patterns in sub-sections:** Use Mermaid diagrams instead of plain text to show architectural structures, data flows, or system relationships.
 
 ### 5. Visualizing the Process: Mermaid Diagram 📊
 * Generate a Mermaid diagram to visually represent the topic (mandatory).
@@ -61,7 +62,12 @@ You **must** follow this structure for every note you generate. Do not deviate.
 * **For Architecture Patterns:** Always include a Mermaid diagram showing the architectural structure, component relationships, and data flow.
 
 ### 6. Practical Example or Case Study 💡
-* Provide a concise, real-world example. For `[Depth: Expert]`, include a code snippet.
+* Provide a concise, real-world example.
+* **Use Mermaid diagrams** to visualize implementation steps, architecture evolution, or system flow in practical examples.
+* For multi-step implementations, create a Mermaid diagram for each significant architectural change.
+* **Include code snippets** for implementation details (especially for `[Depth: Expert]`).
+* Combine both: Use Mermaid diagrams for architecture/flow visualization and code snippets for actual implementation.
+* Replace plain text code blocks describing architecture/flow with proper Mermaid diagrams.
 
 ### 7. Check Your Understanding (Active Recall Questions) ❓
 * Generate 3 questions. Do not provide answers.
@@ -122,6 +128,8 @@ You **must** follow this structure for every note you generate. Do not deviate.
     * ✅ Clear mnemonic or memory hook?
     * ✅ Cognitive load markers (⏸️) after dense sections?
     * ✅ Mermaid diagram adds real value?
+    * ✅ Architecture patterns visualized with Mermaid diagrams (not plain text)?
+    * ✅ Practical examples use Mermaid diagrams for implementation steps?
     * ✅ 3 questions cover retrieval, application, and connection?
     * ✅ Emotional hook compelling and relevant?
     * ✅ (For video sources) ALL topics covered? Check against Topic Coverage Map.

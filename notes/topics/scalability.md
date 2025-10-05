@@ -469,45 +469,142 @@ graph TB
 **Solution Implementation:**
 
 **Step 1: Add Caching (Quick Win)**
+```mermaid
+graph TB
+    Client[👤 Client Request]
+    Server[🖥️ Web Server]
+    Cache[⚡ Redis Cache<br/>TTL: 5 min profiles<br/>TTL: 30 sec feeds]
+    DB[(💾 PostgreSQL DB)]
+    
+    Client --> Server
+    Server -->|Check Cache First| Cache
+    Cache -.->|70% Cache Hit| Server
+    Server -->|30% Cache Miss| DB
+    DB -->|Store in Cache| Cache
+    
+    style Client fill:#e1f5ff
+    style Server fill:#e1ffe1
+    style Cache fill:#ffe1e1
+    style DB fill:#f0ffe1
 ```
-Deploy Redis cache
-Cache user profiles (TTL: 5 minutes)
-Cache feed data (TTL: 30 seconds)
-Result: 70% of reads served from cache, response time down to 80ms
-```
+**Result:** 70% of reads served from cache, response time down to 80ms
 
 **Step 2: Horizontal Scaling for Web Servers**
+```mermaid
+graph TB
+    Client[👤 Client Request]
+    LB[⚖️ AWS Load Balancer<br/>Health Checks Enabled]
+    Server1[🖥️ Web Server 1]
+    Server2[🖥️ Web Server 2]
+    Server3[🖥️ Web Server 3]
+    Cache[⚡ Redis Cache]
+    DB[(💾 PostgreSQL DB)]
+    
+    Client --> LB
+    LB -->|Distribute Load| Server1
+    LB -->|Distribute Load| Server2
+    LB -->|Distribute Load| Server3
+    
+    Server1 --> Cache
+    Server2 --> Cache
+    Server3 --> Cache
+    
+    Server1 --> DB
+    Server2 --> DB
+    Server3 --> DB
+    
+    style Client fill:#e1f5ff
+    style LB fill:#fff4e1
+    style Server1 fill:#e1ffe1
+    style Server2 fill:#e1ffe1
+    style Server3 fill:#e1ffe1
+    style Cache fill:#ffe1e1
+    style DB fill:#f0ffe1
 ```
-Deploy 3 identical web servers
-Add AWS Application Load Balancer
-Configure health checks
-Result: Can handle 3x traffic, redundancy achieved
-```
+**Result:** Can handle 3x traffic, redundancy achieved
 
 **Step 3: Database Replication**
+```mermaid
+graph TB
+    Client[👤 Client Request]
+    LB[⚖️ Load Balancer]
+    Server1[🖥️ Web Server 1]
+    Server2[🖥️ Web Server 2]
+    Server3[🖥️ Web Server 3]
+    Cache[⚡ Redis Cache]
+    
+    Master[(💾 Master DB<br/>All Writes)]
+    Replica1[(📖 Read Replica 1)]
+    Replica2[(📖 Read Replica 2)]
+    
+    Client --> LB
+    LB --> Server1
+    LB --> Server2
+    LB --> Server3
+    
+    Server1 & Server2 & Server3 --> Cache
+    
+    Server1 & Server2 & Server3 -->|Write Queries| Master
+    Server1 & Server2 & Server3 -->|Read Queries| Replica1
+    Server1 & Server2 & Server3 -->|Read Queries| Replica2
+    
+    Master -.->|Replicate| Replica1
+    Master -.->|Replicate| Replica2
+    
+    style Client fill:#e1f5ff
+    style LB fill:#fff4e1
+    style Server1 fill:#e1ffe1
+    style Server2 fill:#e1ffe1
+    style Server3 fill:#e1ffe1
+    style Cache fill:#ffe1e1
+    style Master fill:#e1ffe1
+    style Replica1 fill:#f0ffe1
+    style Replica2 fill:#f0ffe1
 ```
-Setup master-slave replication
-Master: handles all writes
-2 read replicas: handle all read queries
-Application routes reads to replicas, writes to master
-Result: Database CPU from 90% to 30%, query times under 50ms
-```
+**Result:** Database CPU from 90% to 30%, query times under 50ms
 
 **Step 4: Vertical Scaling for Database (when needed)**
+```mermaid
+graph LR
+    Before[(💾 Master DB<br/>8 cores<br/>32GB RAM)]
+    After[(💪 Master DB<br/>16 cores<br/>128GB RAM)]
+    
+    Before -->|Hardware Upgrade| After
+    
+    style Before fill:#ffe1e1
+    style After fill:#e1ffe1
 ```
-Upgrade master DB server: 8 cores → 16 cores, 32GB → 128GB RAM
-Result: Can handle write load for 500,000 users
-```
+**Result:** Can handle write load for 500,000 users
 
 **Future: Sharding (when hitting 1M+ users)**
+```mermaid
+graph TB
+    Client[👤 Client Request]
+    LB[⚖️ Load Balancer]
+    Server[🖥️ Application Server<br/>Shard Router]
+    
+    Shard1[(🗄️ Shard 1<br/>user_id % 4 == 0)]
+    Shard2[(🗄️ Shard 2<br/>user_id % 4 == 1)]
+    Shard3[(🗄️ Shard 3<br/>user_id % 4 == 2)]
+    Shard4[(🗄️ Shard 4<br/>user_id % 4 == 3)]
+    
+    Client --> LB
+    LB --> Server
+    
+    Server -->|Hash-based Routing| Shard1
+    Server -->|Hash-based Routing| Shard2
+    Server -->|Hash-based Routing| Shard3
+    Server -->|Hash-based Routing| Shard4
+    
+    style Client fill:#e1f5ff
+    style LB fill:#fff4e1
+    style Server fill:#e1ffe1
+    style Shard1 fill:#f0e1ff
+    style Shard2 fill:#f0e1ff
+    style Shard3 fill:#f0e1ff
+    style Shard4 fill:#f0e1ff
 ```
-Shard by user_id hash
-Shard 1: user_id % 4 == 0
-Shard 2: user_id % 4 == 1
-Shard 3: user_id % 4 == 2
-Shard 4: user_id % 4 == 3
-Result: Distributed write load, sub-100ms response times maintained
-```
+**Result:** Distributed write load, sub-100ms response times maintained
 
 **Final Architecture Stats:**
 - 3 web servers (horizontal)
